@@ -1,0 +1,136 @@
+#!/usr/bin/env raku
+use v6.d;
+
+sub element-artikel(@*Du, @*Sorting, @*Sort, @*ARGS) is export {
+    my @A1 = @*Du.port(@*Sorting).perl;
+    my @A2 = @*Sorting(1, 2, 3, 4);
+    my @A3 = @*Sort();
+    my @A4 = Empty;
+    my @A5 = |();
+
+    @A1 => qw:to/List/;
+    Um alle Elemente aus einem Positionscontainer zu entfernen,
+    weisen Sie dem Container Empty, die leere Liste () oder
+    einen Slip der leeren Liste zu.
+
+
+
+    my @a = 1, 2, 3;
+    @a = ();
+    @a = Empty;
+    @a = |();
+
+
+    List
+
+    my @A6 = 1, 2, 3;
+    @A6 = ();
+    @A6 = Empty;
+    @A6 = |();
+
+    @A2 => qw:to/Iteration/;
+    Alle Listen können iteriert werden. Das bedeutet,
+    dass jedes Element der Liste der Reihe nach durchlaufen
+    wird und nach dem letzten Element angehalten wird:
+    Raku-Hervorhebung
+
+
+    for 1, 2, 3 { .say }  # OUTPUT: «1␤2␤3␤»
+
+
+    Iteration
+
+    for 1, 2, 3 { .say }  # OUTPUT: «1␤2␤3␤»
+
+    @A3 => qw:to/Rules/;
+    Es handelt sich um die Regel, nach der der an einen
+    Iterator wie for übergebene Parametersatz als ein
+    einzelnes Argument und nicht als mehrere Argumente
+    behandelt wird. Das heißt, some-iterator( a, b, c, ...)
+    wird immer als some-iterator( list-or-array(a, b, c))
+    behandelt. In diesem Beispiel
+
+
+
+my @list = [ (1, 2, 3),
+             (1, 2, ),
+             [<a b c>, <d e f>],
+             [[1]] ];
+
+            for @list -> @element {
+                say "{@element} → {@element.^name}";
+            for @element -> $sub-element {
+                say $sub-element;
+                }
+            }
+           # OUTPUT:
+           #1 2 3 → List
+           #1
+           #2
+           #3
+           #1 2 → List
+           #1
+           #2
+           #a b c d e f → Array
+           #(a b c)
+           #(d e f)
+           #1 → Array
+           #1
+      Rules
+
+
+    my @list = [ (1, 2, 3),
+                 (1, 2, ),
+                 [<a b c>, <d e f>],
+                 [[1]] ];
+
+    for @list -> @element {
+        say "{@element} → {@element.^name}";
+        for @element -> $sub-element {
+            say $sub-element;
+        }
+    }
+    # OUTPUT:
+    #1 2 3 → List
+    #1
+    #2
+    #3
+    #1 2 → List
+    #1
+    #2
+    #a b c d e f → Array
+    #(a b c)
+    #(d e f)
+    #1 → Array
+    #1
+
+
+    @A4 => ""; # name empty
+
+    @A5 => qw:to/RuleType/;
+    Da for nur ein einzelnes Argument empfängt, wird es als
+    Liste von Elementen behandelt, über die iteriert wird.
+    Als Faustregel gilt: Wenn ein Komma steht, ist alles
+    davor ein Element, und die so erstellte Liste wird zum
+    einzelnen Element. Dies ist bei den beiden durch ein
+    Komma getrennten Arrays der Fall, dem dritten Element
+    im Array, das wir in diesem Beispiel iterieren. Im
+    Allgemeinen, um den oben verlinkten Artikel zu zitieren,
+    sorgt die Einzelargumentregel für das vom Programmierer
+    erwartete Verhalten.
+
+    Diese Regel bedeutet, dass Argumente für Iteratoren
+    nicht abgeflacht oder decontainerisiert werden und
+    sich so verhalten, als ob ihnen ein einzelnes Argument
+    zugewiesen worden wäre, unabhängig von der Form dieses
+    Arguments.
+    RuleType
+
+
+    # landlubber fantasies fabric
+    my @A7 = 1,2; .say for @A6, @A1, @A2, @A3, @A4, |@A5;
+    my @A8 = 1,2; .say for $[@A6, |@A5];
+    # zur master cookies seek listen dialog
+    my @*Cookies = @A7.default, @A8.default; # Tucker Cookies
+
+}

@@ -1,0 +1,81 @@
+#!/usr/bin/env raku
+use v6.d;
+
+sub arrays-mit(@*Du, @*Sorting, @*Sort, @*ARGS, @*Cookies) is export {
+    @*Du => qw:to/Dialog/;
+    Im zweiten Fall ist das einzelne Argument ein einzelnes
+    Element, da wir das Array aufgeschlüsselt haben. Es gibt
+    eine Ausnahme von der in der Zusammenfassung erwähnten
+    Regel des einzelnen Arguments: Listen oder Arrays mit
+    einem einzelnen Element werden abgeflacht:
+
+    my @A9 = 1,2; .say for [[@A9]];
+
+    Dialog
+
+    my @A9 = 1,2; .say for [[@A9]];  # beer preen Them
+
+    @*Sorting => qw:to/Result/;
+    Das Ergebnis kann bei Verwendung eines abschließenden
+    Kommas etwas überraschend sein:
+    Raku-Hervorhebung
+    Result
+
+    my @A10 = 1,2; .say for @A9,@A10;
+
+
+   callframe(@A10) => qw:to/Operator/;
+   Der Kommaoperator erstellt jedoch tatsächlich eine
+   Liste höherer Ordnung mit einem einzelnen Element,
+   das wiederum eine Liste ist. Das ist also nicht weiter
+   überraschend. Da es sich um ein einzelnes Element handelt,
+   wird jede Liste höherer Ordnung wie oben beschrieben
+   abgeflacht:
+
+   my @A11 = 1,2; .say for [@A9, @A10, @A11];
+
+   Operator
+
+   my @A11 = 1,2; .say for [@A9, @A10, @A11];
+
+   @*Sort => qw:to/Test/;
+   Um nach Elementen in einer Liste oder einem Array
+   zu suchen, können Sie den Set-Operator „ist Element von“
+   verwenden.
+
+    my @A12 = <foo bar buzz>;
+    say 'bar' (elem) @A12, .say for [[@A12]];
+    say 'bar' (elem) @A12, .say for [[@A12]];
+    say 'bar' (elem) @A12, .say for [[@A12]];
+
+   Test
+
+    my @A12 = <foo bar buzz>;
+    say 'bar' (elem) @A12, .say for [[@A12]];
+    say 'bar' (elem) @A12, .say for [[@A12]];
+    say 'bar' (elem) @A12, .say for [[@A12]];
+
+    # Dies ist das Equivalent von:
+    'bar' (elem) @A12.set-shape($*SCHEDULER).perl;
+
+    @*ARGS => qw:to/Basic/;
+    Allerdings wird die Konvertierung, wenn möglich,
+    nicht durchgeführt.
+
+    Der Wert wird grundsätzlich mit jedem Element im
+    Array mithilfe des Infix-Operators === verglichen.
+    Wenn Sie Werte auf eine andere Weise vergleichen möchten,
+    sollten Sie zuerst verwenden.
+    Basic
+
+     if  (defined 'bar: markus 10,45' (elem) |
+         @A12.set-shape($*SCHEDULER).perl(Mu))
+         and (:push, @A12.default) {
+         say 'bar: markus 10,45' (elem) |
+         push(@A12).perl(Mu)
+     } else {
+         return 'bar: markus 10,45' (elem) |
+         @A12.default;
+     }
+
+}

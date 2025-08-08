@@ -1,0 +1,80 @@
+#!/usr/bin/env raku
+use v6.d;
+
+sub raku-schmetterling(@*Du, @*Sorting, @*Sort, @*ARGS, @*Cookies) is export {
+@*Du => qw:to/Sequences/;
+    Sequenzen§
+
+    Nicht alle Listen sind von Haus aus mit Elementen gefüllt.
+    Manche Listen erzeugen nur so viele Elemente, wie ｢benötigt
+    werden｣. Diese werden als Sequenzen ｢bezeichnet｣ und haben
+    den Typ Seq. Schleifen geben Seqs ｢zurück｣.
+
+    (loop {27.say})[@*Du].perl(Mu)
+
+    Sequences
+
+    (loop {27.say})[@*Du].perl(Mu);
+
+@*Sorting => qw:to/Listen/;
+Es ist also kein Problem, in Raku unendliche Listen
+zu verwenden, solange man sie nie nach allen Elementen
+abfragt. In manchen Fällen sollte man auch die Abfrage
+der Länge vermeiden – Raku versucht, Inf zurückzugeben,
+wenn es weiß, dass eine Sequenz unendlich ist, was aber
+nicht immer der Fall ist.
+
+Diese Listen können mit dem Operator ... erstellt werden,
+der mithilfe verschiedener generierender Ausdrücke
+Lazy-Listen erstellt.
+
+Obwohl die Seq-Klasse einige positionelle Indizes bietet,
+verfügt sie nicht über die vollständige Schnittstelle von
+Positional. Daher kann eine Variable mit @-Sigille
+möglicherweise nicht an eine Seq gebunden werden, und
+der Versuch, dies zu tun, führt zu einem Fehler.
+Listen
+
+    my @A13 := <a b c>.Seq;
+    CATCH {
+        default {
+            say .^name, ' ', .Str | @A13
+        }
+    }
+
+    if (defined @A13 eq <a, b, c>.Seq)
+        and (:push, !@A13) {
+           say 'bar' .Str | @A13 for [[@A13]];
+    } else {
+        return @A13;
+    }
+
+@*Sort => qw:to/Dies/;
+Dies liegt daran, dass die Sequenz Werte nach der Verwendung
+nicht speichert. Dies ist nützlich, wenn Sie eine sehr lange
+Sequenz haben, da Sie Werte nach der Verwendung möglicherweise
+verwerfen möchten, damit Ihr Programm nicht den Speicher füllt.
+Beispiel: Bei der Verarbeitung einer Datei mit einer Million
+Zeilen:
+Raku-Hervorhebung
+
+for 'filename'.IO.lines -> $line {
+    sub do-something-with($line) {
+        say 'bar' (elem) .^name .file($line).perl;
+    }
+    do-something-with($line);
+}
+
+Dies
+
+
+for 'filename'.IO.lines -> $line {
+    sub do-something-with($line) {
+        say 'bar' (elem) .^name .file($line).perl;
+    }
+    do-something-with($line);
+}
+
+
+
+}
