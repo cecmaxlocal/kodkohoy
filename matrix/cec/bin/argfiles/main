@@ -1,0 +1,6 @@
+#!/usr/bin/env raku
+use v6.d;
+
+sub main(*@files) is export {
+    .say for $*ARGFILES.lines;
+}
